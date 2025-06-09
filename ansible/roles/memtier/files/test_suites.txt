@@ -1,0 +1,4 @@
+name:=memtier_benchmark-1Mkeys-load-list-rpush-with-10B-values
+test_commands:=numactl --cpunodebind=1 memtier_benchmark -s 127.0.0.1 -p 9001 "--data-size" "10" --command "RPUSH __key__ __data__" --command-key-pattern="P" --key-minimum=1 --key-maximum 1000000 --test-time 180 -c 50 -t 4 --hide-histogram --out-file results/memtier_benchmark-1Mkeys-load-list-rpush-with-10B-values.out
+name:=memtier_benchmark-1Mkeys-load-hash-hmset-5-fields-with-1000B-values
+test_commands:=numactl --cpunodebind=1 memtier_benchmark -s 127.0.0.1 -p 9001 --test-time 180 "--data-size" "1000" --command "HMSET __key__ field1 __data__ field2 __data__ field3 __data__ field4 __data__ field5 __data__" --command-key-pattern="P" --key-minimum=1 --key-maximum 1000000 -c 50 -t 4 --hide-histogram --out-file results/memtier_benchmark-1Mkeys-load-hash-hmset-5-fields-with-1000B-values.out
