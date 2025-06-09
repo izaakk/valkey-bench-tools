@@ -1,0 +1,42 @@
+---
+- name: Install dependencies
+  package:
+    name:
+      - gcc
+      - make
+      - cmake
+      - hiredis-devel
+      - openssl-devel
+      - git
+    state: present
+
+- name: Clone memtier_benchmark
+  git:
+    repo: "https://github.com/RedisLabs/memtier_benchmark.git"
+    dest: /opt/memtier_benchmark
+    version: master
+
+- name: Build memtier_benchmark
+  shell: |
+    ./build.sh
+  args:
+    chdir: /opt/memtier_benchmark
+
+- name: Create bench directory
+  file:
+    path: /home/ec2-user/bench
+    state: directory
+    mode: '0755'
+    owner: ec2-user
+    group: ec2-user
+
+- name: Copy scripts
+  copy:
+    src: "{{ item }}"
+    dest: "/home/ec2-user/bench/{{ item }}"
+    mode: '0755'
+    owner: ec2-user
+    group: ec2-user
+  with_items:
+    - run_test_suite.sh
+    - all_test_suites.sh

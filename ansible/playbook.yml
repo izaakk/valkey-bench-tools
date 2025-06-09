@@ -1,0 +1,9 @@
+---
+- hosts: server
+  become: yes
+  roles:
+    - valkey
+- hosts: client
+  become: yes
+  roles:
+    - memtier

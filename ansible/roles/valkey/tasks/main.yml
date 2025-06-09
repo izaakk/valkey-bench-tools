@@ -1,0 +1,32 @@
+---
+- name: Install build dependencies
+  package:
+    name:
+      - gcc
+      - make
+      - jemalloc-devel
+      - git
+    state: present
+
+- name: Clone Valkey
+  git:
+    repo: "https://github.com/valkey-io/valkey.git"
+    dest: /opt/valkey
+    version: "stable"
+
+- name: Build Valkey
+  make:
+    chdir: /opt/valkey
+
+- name: Template configuration
+  template:
+    src: valkey.conf.j2
+    dest: /opt/valkey/valkey.conf
+    mode: '0644'
+
+- name: Start Valkey
+  shell: |
+    nohup /opt/valkey/src/valkey-server /opt/valkey/valkey.conf &> /var/log/valkey.log &
+  args:
+    creates: /var/log/valkey.log
+  become: yes
